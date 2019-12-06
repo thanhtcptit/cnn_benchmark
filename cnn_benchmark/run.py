@@ -15,6 +15,7 @@ def main():
 
     SUBCOMMAND_COLLECTIONS = {
         'train': Train()
+        # TODO add benchmark runner scripts
     }
 
     for name, subcommand in SUBCOMMAND_COLLECTIONS.items():

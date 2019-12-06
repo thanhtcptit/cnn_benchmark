@@ -1,13 +1,12 @@
-import tensorpack as tp
 import tensorflow as tf
+import tensorpack as tp
 
 from nsds.common.registrable import Registrable
-from tensorflow.python.framework.tensor_spec import TensorSpec
-from tensorpack import ModelDesc
 from tensorpack.tfutils.summary import add_moving_summary
+from tensorflow.python.framework.tensor_spec import TensorSpec
 
 
-class BaseClassifier(ModelDesc, Registrable):
+class BaseClassifier(tp.ModelDesc, Registrable):
     """Base class for image classification
     Any subclass will need to implement :meth: inference()
     """

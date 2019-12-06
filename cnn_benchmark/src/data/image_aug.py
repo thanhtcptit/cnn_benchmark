@@ -7,19 +7,25 @@ from tensorpack.dataflow import imgaug
 
 
 def parse_augmentor(augmentors_params, is_train):
-    # TODO load augmentors in-order with the config file
     augmentors_params = dict(augmentors_params)
     if is_train:
         augmentors_params = augmentors_params['training']
     else:
         augmentors_params = augmentors_params['test']
 
+    preorder_augmentors = []
     augmentors = []
     for name, params in augmentors_params.items():
         params = dict(params)
+        priority = params.pop('priority')
         aug_class = getattr(imgaug, name)
         aug_inst = aug_class(**params)
-        augmentors.append(aug_inst)
+        preorder_augmentors.append([priority, aug_inst])
+
+    preorder_augmentors.sort(key=lambda x: x[0],
+                             reverse=True)
+    for _, augmentor in preorder_augmentors:
+        augmentors.append(augmentor)
     return augmentors
 
 

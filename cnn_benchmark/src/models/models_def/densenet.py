@@ -284,6 +284,7 @@ class DenseNet(tf.keras.Model):
 
 def inference(images, keep_probability, phase_train=True,
               bottleneck_layer_size=128, weight_decay=0.0, reuse=None):
+    # TODO fix tensorpack - tf.keras compatible issue
     net = DenseNet(depth_of_model=22, growth_rate=12, num_of_blocks=3,
                    output_classes=bottleneck_layer_size,
                    num_layers_in_each_block=-1,
