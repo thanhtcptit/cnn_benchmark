@@ -96,5 +96,9 @@ def flip_rotate_normalize(is_train):
     return augmentors
 
 
+def normalize():
+    return [imgaug.MeanVarianceNormalize(all_channel=True)]
+
+
 def identity_augmentor():
     return [imgaug.Identity()]

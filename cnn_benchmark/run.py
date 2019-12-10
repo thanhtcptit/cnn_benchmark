@@ -5,6 +5,7 @@ from nsds.common.util import import_submodules
 from nsds.commands.subcommand import ArgumentParserWithDefaults, Subcommand
 
 from src.train import run_training
+from src.benchmark import run_benchmark
 
 import_submodules('src')
 
@@ -14,8 +15,8 @@ def main():
     subparsers = parser.add_subparsers()
 
     SUBCOMMAND_COLLECTIONS = {
-        'train': Train()
-        # TODO add benchmark runner scripts
+        'train': Train(),
+        'benchmark': Benchmark()
     }
 
     for name, subcommand in SUBCOMMAND_COLLECTIONS.items():
@@ -58,6 +59,36 @@ class Train(Subcommand):
 def parse_param_and_run_training(args):
     params = Params.from_file(args.param_path)
     return run_training(params, args.checkpoint_dir, args.recover, args.force)
+
+
+class Benchmark(Subcommand):
+    def add_subparser(self, name, subparsers):
+        description = 'Run benchmark.'
+        subparser = subparsers.add_parser(name, description=description)
+
+        subparser.add_argument(
+            'param_path',
+            type=str,
+            help='path to parameter file describing the benchmark to be run')
+        subparser.add_argument(
+            '-c', '--checkpoint_dir',
+            default=None,
+            type=str,
+            help=('directory in which to save the model and its logs.'
+                  'Put None to name the directory based on current time'))
+        subparser.add_argument(
+            '--show_logs',
+            action='store_true',
+            help=('Send training logs to stdout')
+        )
+
+        subparser.set_defaults(func=parse_param_and_run_benchmark)
+        return subparser
+
+
+def parse_param_and_run_benchmark(args):
+    params = Params.from_file(args.param_path)
+    return run_benchmark(params, args.checkpoint_dir, args.show_logs)
 
 
 if __name__ == '__main__':

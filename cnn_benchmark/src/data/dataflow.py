@@ -10,7 +10,7 @@ from tensorpack.dataflow import RNGDataFlow, AugmentImageComponent, \
 from tensorpack.input_source import QueueInput, StagingInput, TFDatasetInput
 
 from src.data.image_aug import parse_augmentor, standard_augmentor, \
-    fbresnet_augmentor, flip_rotate_normalize, identity_augmentor
+    fbresnet_augmentor, flip_rotate_normalize, normalize, identity_augmentor
 
 
 def get_image_paths_and_labels(data_dir):
@@ -95,6 +95,8 @@ def build_dataflow(img_paths, img_labels, is_train, batch_size,
             augmentors = standard_augmentor(is_train)
         elif augmentor_params == 'fbresnet':
             augmentors = fbresnet_augmentor(is_train)
+        elif augmentor_params == 'normalize':
+            augmentors = normalize()
         elif augmentor_params == 'flip_rotate_normalize':
             augmentors = flip_rotate_normalize(is_train)
         else:

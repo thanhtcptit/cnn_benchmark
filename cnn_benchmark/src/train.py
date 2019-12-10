@@ -56,13 +56,8 @@ def run_training(params, checkpoint_dir=None, recover=False, force=False):
         augmentor_params=augmentor_params,
         validation_split_ratio=validation_split_ratio)
 
-    # Build model
-    models_params['image_size'] = data_params['image_size']
-    models_params['num_labels'] = data_params['num_labels']
-    models = BaseClassifier.from_params(models_params)
-
     # Build callbacks list
-    extra_callbacks = parse_callback_params(callback_params)
+    extra_callbacks = parse_callback_params(callback_params, params)
     callbacks = [
         ModelSaver(max_to_keep=5, checkpoint_dir=checkpoint_dir),
         InferenceRunner(
@@ -74,6 +69,11 @@ def run_training(params, checkpoint_dir=None, recover=False, force=False):
                                       summary_name='val-top3-error')]),
         MinSaver(monitor_stat='val-top3-error')
     ] + extra_callbacks
+
+    # Build model
+    models_params['image_size'] = data_params['image_size']
+    models_params['num_labels'] = data_params['num_labels']
+    models = BaseClassifier.from_params(models_params)
 
     # Build trainer
     trainer = SyncMultiGPUTrainerParameterServer(

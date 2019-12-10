@@ -8,10 +8,10 @@ from src.models.base import BaseClassifier
 @BaseClassifier.register('external')
 class ExternalModel(BaseClassifier):
     def __init__(self, image_size, num_labels, model_def, embedding_dim,
-                 keep_pr, l2_regular, optimizer, lr):
+                 keep_pr, l2_regular, optimizer, learning_rate):
         super(ExternalModel, self).__init__(
             image_size, num_labels, embedding_dim, keep_pr, l2_regular,
-            optimizer, lr)
+            optimizer, learning_rate)
         self.model_def = model_def
         self.network = importlib.import_module(model_def)
 

@@ -12,14 +12,14 @@ class BaseClassifier(tp.ModelDesc, Registrable):
     """
 
     def __init__(self, image_size, num_labels, embedding_dim,
-                 keep_pr, l2_regular, optimizer, lr):
+                 keep_pr, l2_regular, optimizer, learning_rate):
         self.image_size = image_size
         self.num_labels = num_labels
         self.embedding_dim = embedding_dim
         self.keep_pr = keep_pr
         self.l2_regular = l2_regular
         self._optimizer = optimizer
-        self.lr = lr
+        self.learning_rate = learning_rate
 
         tf.reset_default_graph()
 
@@ -73,19 +73,19 @@ class BaseClassifier(tp.ModelDesc, Registrable):
         return loss
 
     def optimizer(self):
-        lr = tf.get_variable('learning_rate', initializer=self.lr,
+        lr = tf.get_variable('learning_rate', initializer=self.learning_rate,
                              trainable=False)
         add_moving_summary(lr)
         if self._optimizer == 'ADAM':
-            return tf.train.AdamOptimizer(learning_rate=lr,
-                                          epsilon=0.1)
+            return tf.train.AdamOptimizer(
+                learning_rate=lr, epsilon=0.1)
         elif self._optimizer == 'ADAGRAD':
             return tf.train.AdagradOptimizer(learning_rate=lr)
         elif self._optimizer == 'RMSPROP':
             return tf.train.RMSPropOptimizer(
-                lr, decay=0.9, momentum=0.9, epsilon=1.0)
+                learning_rate=lr, decay=0.9, momentum=0.9, epsilon=1.0)
         elif self._optimizer == 'MOM':
             return tf.train.MomentumOptimizer(
-                lr, 0.9, use_nesterov=True)
+                learning_rate=lr, momentum=0.9, use_nesterov=True)
         else:
             raise ValueError('Invalid optimization algorithm')

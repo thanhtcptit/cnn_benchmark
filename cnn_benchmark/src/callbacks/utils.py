@@ -1,4 +1,5 @@
 import os
+import nsds
 import inspect
 import mlflow
 import importlib
@@ -10,7 +11,28 @@ from src.utils.common import load_json
 from src.callbacks.hyperparam_setter import *
 
 
-def parse_callback_params(callback_params):
+def get_params_values_from_path(path, all_params):
+    levels = path.split('.')
+    dict_ref = [all_params[levels[0]]]
+    for i in range(1, len(levels) - 1):
+        dict_ref.append(dict_ref[i - 1][levels[i]])
+    return dict_ref[-1][levels[-1]]
+
+
+def parse_dependency_params(callback_param, all_params):
+    dict_ref = [callback_param]
+    for d in dict_ref:
+        for k, v in d.items():
+            if isinstance(v, nsds.common.params.Params):
+                if 'dependency' in v:
+                    d[k] = get_params_values_from_path(v['dependency'],
+                                                       all_params)
+                else:
+                    dict_ref.append(v)
+    return callback_param
+
+
+def parse_callback_params(callback_params, all_params):
     callback_params = dict(callback_params)
     preorder_callbacks = []
     callbacks = []
@@ -19,6 +41,7 @@ def parse_callback_params(callback_params):
     for name, params in callback_params.items():
         params = dict(params)
         priority = params.pop('priority')
+        params = parse_dependency_params(params, all_params)
         callback_class = getattr(callback_module, name)
         callback_inst = callback_class(**params)
         preorder_callbacks.append([priority, callback_inst])
@@ -31,13 +54,10 @@ def parse_callback_params(callback_params):
 
 class MLflowLogging(Callback):
     def __init__(self, experiment_name, stats, params, artifacts=None,
-                 trigger_every=1, tracking_uri="", auth_key=None):
+                 trigger_every=1, tracking_uri="", google_auth_key=None):
         if not isinstance(stats, list):
             stats = [stats]
         self._stats = stats
-
-        if not isinstance(params, dict):
-            params = dict(params)
 
         if artifacts is None:
             artifacts = []
@@ -47,8 +67,8 @@ class MLflowLogging(Callback):
 
         self._trigger_every = trigger_every
 
-        if auth_key:
-            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = auth_key
+        if google_auth_key:
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = google_auth_key
         mlflow.set_tracking_uri(tracking_uri)
         mlflow.set_experiment(experiment_name)
         run_obj = mlflow.start_run()

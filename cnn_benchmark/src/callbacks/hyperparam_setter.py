@@ -21,7 +21,7 @@ class ExponentialDecayHyperParamSetter(HyperParamSetter):
 
 # Learning rate finder implementation
 class AutoIncrementHyperParamSetter(HyperParamSetter):
-    def __init__(self, param='learning_rate', num_iterate=100, init_value=1e-7,
+    def __init__(self, param, num_iterate, init_value=1e-7,
                  final_value=1):
         super(AutoIncrementHyperParamSetter, self).__init__(param)
         self._init_value = init_value
@@ -38,8 +38,8 @@ class AutoIncrementHyperParamSetter(HyperParamSetter):
 
 # One-cycle policy implementation
 class OneCycleHyperParamSetter(HyperParamSetter):
-    def __init__(self, param='learning_rate', max_value=3e-3, num_cycle=90,
-                 num_epoch=100, div_init=100):
+    def __init__(self, param, num_epoch, num_cycle,
+                 max_value=3e-3, div_init=100):
         super(OneCycleHyperParamSetter, self).__init__(param)
         self._max_value = max_value
         self._num_cycle = num_cycle
