@@ -573,11 +573,13 @@ def _get_block_sizes(resnet_size):
 
 
 def inference(images, keep_probability, phase_train=True,
-              bottleneck_layer_size=128, weight_decay=0.0, reuse=None):
-    network = Model(resnet_size=RESNET_SIZE, bottleneck=(RESNET_SIZE >= 50),
+              bottleneck_layer_size=128, weight_decay=0.0, reuse=None,
+              resnet_size=50, resnet_version=2):
+    network = Model(resnet_size=resnet_size, bottleneck=(resnet_size >= 50),
                     num_classes=bottleneck_layer_size, num_filters=64,
                     kernel_size=7, conv_stride=2, first_pool_size=3,
                     first_pool_stride=2,
-                    block_sizes=_get_block_sizes(RESNET_SIZE),
-                    block_strides=[1, 2, 2, 2])
+                    block_sizes=_get_block_sizes(resnet_size),
+                    block_strides=[1, 2, 2, 2], resnet_version=resnet_version,
+                    dtype=DEFAULT_DTYPE)
     return network(images, phase_train), None

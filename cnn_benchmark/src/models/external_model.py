@@ -13,7 +13,8 @@ class ExternalModel(BaseClassifier):
             image_size, num_labels, embedding_dim, keep_pr, l2_regular,
             optimizer, learning_rate)
         self.model_def = model_def
-        self.network = importlib.import_module(model_def)
+        self.type = self.model_def.pop('type')
+        self.network = importlib.import_module(self.type)
 
     def inference(self, image):
         is_training = tp.get_current_tower_context().is_training
@@ -21,5 +22,5 @@ class ExternalModel(BaseClassifier):
             image, keep_probability=self.keep_pr,
             phase_train=is_training,
             bottleneck_layer_size=self.embedding_dim,
-            weight_decay=self.l2_regular)
+            weight_decay=self.l2_regular, **self.model_def)
         return prelogits

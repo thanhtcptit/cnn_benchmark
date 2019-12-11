@@ -29,7 +29,11 @@
     },
     "models": {
         "type": "external",
-        "model_def": "src.models.models_def.resnet",
+        "model_def": {
+            "type": "src.models.models_def.resnet",
+            "resnet_size": 50,
+            "resnet_version": 2
+        },
         "embedding_dim": 512,
         "keep_pr": 0.5,
         "l2_regular": 1e-3,

@@ -1,4 +1,5 @@
 import os
+import nsds
 import time
 import shutil
 import subprocess
@@ -53,7 +54,11 @@ def run_benchmark(params, checkpoint_dir, show_logs=False):
         iter_params = {}
         idx = 0
         for param, param_list in benchmark_params.items():
-            iter_params[param] = param_list[iter_values[idx]]
+            if isinstance(param_list[iter_values[idx]], nsds.common.Params):
+                value = dict(param_list[iter_values[idx]])
+            else:
+                value = param_list[iter_values[idx]]
+            iter_params[param] = value
             idx += 1
         params = parse_benchmark_params(iter_params, params)
         iter_config_file = os.path.abspath(os.path.join(
