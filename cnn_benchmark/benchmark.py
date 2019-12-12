@@ -38,7 +38,9 @@ def parse_benchmark_params(iter_params, params):
     return params
 
 
-def run_benchmark(params, checkpoint_dir, show_logs=False):
+def run_benchmark(params, checkpoint_dir=None, show_logs=False):
+    if checkpoint_dir is None:
+        checkpoint_dir = 'train_logs/'
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     # Load params
@@ -70,8 +72,8 @@ def run_benchmark(params, checkpoint_dir, show_logs=False):
         p = subprocess.Popen(
             f'python3 run.py train {iter_config_file} '
             f'-c {os.path.abspath(iter_checkpoint_dir)}',
-            stdout=subprocess.PIPE if show_logs else subprocess.DEVNULL,
-            stderr=subprocess.PIPE if show_logs else subprocess.DEVNULL,
+            stdout=None if show_logs else subprocess.DEVNULL,
+            stderr=None if show_logs else subprocess.DEVNULL,
             shell=True)
         (output, err) = p.communicate()
         p_status = p.wait()

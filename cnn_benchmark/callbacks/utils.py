@@ -7,8 +7,8 @@ import tensorflow as tf
 
 from tensorpack.callbacks import Callback
 
-from src.utils.common import load_json
-from src.callbacks.hyperparam_setter import *
+from cnn_benchmark.utils.common import load_json
+from cnn_benchmark.callbacks.hyperparam_setter import *
 
 
 def get_params_values_from_path(path, all_params):
@@ -37,7 +37,7 @@ def parse_callback_params(callback_params, all_params):
     preorder_callbacks = []
     callbacks = []
 
-    callback_module = importlib.import_module('src.callbacks')
+    callback_module = importlib.import_module('cnn_benchmark.callbacks')
     for name, params in callback_params.items():
         params = dict(params)
         priority = params.pop('priority')

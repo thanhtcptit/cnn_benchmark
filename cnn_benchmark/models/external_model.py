@@ -2,7 +2,7 @@ import importlib
 import tensorpack as tp
 import tensorflow as tf
 
-from src.models.base import BaseClassifier
+from cnn_benchmark.models.base import BaseClassifier
 
 
 @BaseClassifier.register('external')

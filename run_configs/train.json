@@ -2,12 +2,11 @@
     "seed": 666,
     "pretrain_weight": "",
     "data": {
-        "data_dir": "data/raw/glamira-all-product-2-view/sku_image",
+        "data_dir": "data/glamira-products",
         "num_labels": 5256, 
         "image_size": 160
     },
     "dataflow": {
-        "data_dir": "/media/disk2/thanhtc/processed-image-2-vec/data/processed/glamira-all-product-2-view-fixed/sku_image",
         "validation_split_ratio": 0.1,
         "batch_size": 32,
         "num_parallel": 12,
@@ -30,7 +29,7 @@
     "models": {
         "type": "external",
         "model_def": {
-            "type": "src.models.models_def.resnet",
+            "type": "cnn_benchmark.models.models_def.resnet",
             "resnet_size": 50,
             "resnet_version": 2
         },
@@ -63,7 +62,8 @@
                 "learning_rate": {
                     "dependency": "models.learning_rate"
                 }
-            }
+            },
+            "tracking_uri": "train_logs/mlruns"
         },
         "ExponentialDecayHyperParamSetter": {
             "priority": 1,

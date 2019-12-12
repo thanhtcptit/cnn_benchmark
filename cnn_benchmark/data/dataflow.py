@@ -9,7 +9,7 @@ from tensorpack.dataflow import RNGDataFlow, AugmentImageComponent, \
     BatchData, MultiThreadMapData, PrefetchDataZMQ, dataset, imgaug
 from tensorpack.input_source import QueueInput, StagingInput, TFDatasetInput
 
-from src.data.image_aug import parse_augmentor, standard_augmentor, \
+from cnn_benchmark.data.image_aug import parse_augmentor, standard_augmentor, \
     fbresnet_augmentor, flip_rotate_normalize, normalize, identity_augmentor
 
 

@@ -4,10 +4,10 @@ from nsds.common import Params
 from nsds.common.util import import_submodules
 from nsds.commands.subcommand import ArgumentParserWithDefaults, Subcommand
 
-from src.train import run_training
-from src.benchmark import run_benchmark
+from cnn_benchmark.train import run_training
+from cnn_benchmark.benchmark import run_benchmark
 
-import_submodules('src')
+import_submodules('cnn_benchmark')
 
 
 def main():
@@ -78,8 +78,10 @@ class Benchmark(Subcommand):
                   'Put None to name the directory based on current time'))
         subparser.add_argument(
             '--show_logs',
-            action='store_true',
-            help=('Send training logs to stdout')
+            type=int,
+            choices=[0, 1],
+            default=0,
+            help=('Put 1 to send logs to stdout')
         )
 
         subparser.set_defaults(func=parse_param_and_run_benchmark)

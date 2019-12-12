@@ -12,9 +12,9 @@ from tensorpack.callbacks import ModelSaver, InferenceRunner, MinSaver, \
 from tensorpack.train import AutoResumeTrainConfig, \
     SyncMultiGPUTrainerParameterServer, launch_train_with_config
 
-from src.models.base import BaseClassifier
-from src.data.dataflow import get_image_dataflow
-from src.callbacks.utils import parse_callback_params
+from cnn_benchmark.models.base import BaseClassifier
+from cnn_benchmark.data.dataflow import get_image_dataflow
+from cnn_benchmark.callbacks.utils import parse_callback_params
 
 
 def run_training(params, checkpoint_dir=None, recover=False, force=False):
@@ -40,7 +40,7 @@ def run_training(params, checkpoint_dir=None, recover=False, force=False):
     random.seed(params['seed'])
 
     # Build dataflow
-    data_dir = dataflow_params['data_dir']
+    data_dir = data_params['data_dir']
     augmentor_params = dataflow_params['augmentors']
     if not bool(augmentor_params):
         augmentor_params = None
