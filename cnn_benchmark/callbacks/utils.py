@@ -16,7 +16,10 @@ def get_params_values_from_path(path, all_params):
     dict_ref = [all_params[levels[0]]]
     for i in range(1, len(levels) - 1):
         dict_ref.append(dict_ref[i - 1][levels[i]])
-    return dict_ref[-1][levels[-1]]
+    values = dict_ref[-1][levels[-1]]
+    if isinstance(values, nsds.common.params.Params):
+        values = dict(values)
+    return values
 
 
 def parse_dependency_params(callback_param, all_params):
