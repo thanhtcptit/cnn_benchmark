@@ -10,7 +10,7 @@ protobuf==3.9.2
 scikit-image==0.15.0
 scikit-learn==0.21.2
 scipy==1.1.0
-tensorflow-gpu==1.13.2
+tensorflow-gpu==2.3.1
 tensorpack==0.9.8
 urllib3==1.24.3
 pandas
